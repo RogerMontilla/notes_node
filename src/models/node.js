@@ -1,4 +1,4 @@
-/* vor a crear los Schemes para mongoDB */
+/* voy a crear los Schemes para mongoDB */
 //requerimoa mongoose y las variables Schema y model con ECMAScript6
 const { Schema, model } = require('mongoose');
 
