@@ -1,6 +1,8 @@
 /*En este archivo se configura el serividor con express*/
 const express = require('express');
 const path = require('path');
+const morgan = require('morgan');
+const methodOverride = require('method-override');
 //Handlebars
 const exphbs = require('express-handlebars');
 
@@ -26,6 +28,11 @@ app.engine(
 app.set('view engine', '.hbs');
 
 //###Middlewares###
+app.use(morgan('dev'));
+// me permite cambiar la peticion que me envia el usuario de post a DELETE, lo cambio en el boton de borrar
+// de la tarjeta usando ?_method=DELETE en la url que accede el cliente
+// tambien hay que añadir un input oculto (ver archivo all-notes.hbs)
+app.use(methodOverride('_method'));
 //urlencoded: convierte los datos en un objeto JSON
 app.use(express.urlencoded({ extended: false }));
 //###Global Variables###

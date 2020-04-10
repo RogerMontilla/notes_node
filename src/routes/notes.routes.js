@@ -2,6 +2,8 @@
 const { Router } = require('express');
 const router = Router();
 
+//llamo las funciones desde el archivo notes.controller
+//en el mismo ejecuto las funciones de busqueda y renderizado de vistas
 const {
   renderNoteForm,
   createNewNote,
@@ -12,7 +14,7 @@ const {
 } = require('../controllers/notes.controller');
 //New Note
 router.get('/notes/add', renderNoteForm);
-router.post('/notes/add', createNewNote);
+router.post('/notes/new-note', createNewNote);
 
 //Get All Notes
 router.get('/notes', renderNotes);

@@ -1,27 +1,42 @@
 const notesCtrl = {};
+const Note = require('../models/note');
 
 notesCtrl.renderNoteForm = (req, res) => {
-  res.send('note add');
+  res.render('notes/new-note');
 };
 
-notesCtrl.createNewNote = (req, res) => {
-  res.send('new note');
+notesCtrl.createNewNote = async (req, res) => {
+  const { title, description } = req.body;
+  //se guardan las variables title y description dentro del modelo Notes
+  //en este caso no escribo title:title (la que viene de req.body y la de la base de datos)
+  //porque al tener las variables el mismo
+  //nombre JS me deja colocarlas una sola vez
+  var newNote = new Note({ title, description });
+  await newNote.save();
+  res.redirect('/notes');
 };
 
-notesCtrl.renderNotes = (req, res) => {
-  res.send('render all notes');
+notesCtrl.renderNotes = async (req, res) => {
+  const notes = await Note.find().lean();
+  // paso el objeto notes con el valor encontrado
+  res.render('notes/all-notes', { notes });
 };
 
-notesCtrl.renderEditForm = (req, res) => {
-  res.send('render edit formt');
+notesCtrl.renderEditForm = async (req, res) => {
+  const note = await Note.findById(req.params.id).lean();
+  res.render('notes/edit-note', { note });
 };
 
-notesCtrl.updateNote = (req, res) => {
-  res.send('update note');
+notesCtrl.updateNote = async (req, res) => {
+  //Destructuring
+  const { title, description } = req.body;
+  await Note.findByIdAndUpdate(req.params.id, { title, description });
+  res.redirect('/notes');
 };
 
-notesCtrl.deleteNote = (req, res) => {
-  res.send('delete note');
+notesCtrl.deleteNote = async (req, res) => {
+  await Note.findByIdAndDelete(req.params.id);
+  res.redirect('/notes');
 };
 
 module.exports = notesCtrl;
