@@ -3,8 +3,9 @@ const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 const methodOverride = require('method-override');
-//Handlebars
 const exphbs = require('express-handlebars');
+const flash = require('connect-flash');
+const session = require('express-session');
 
 //###Initializations###
 const app = express();
@@ -35,11 +36,25 @@ app.use(morgan('dev'));
 app.use(methodOverride('_method'));
 //urlencoded: convierte los datos en un objeto JSON
 app.use(express.urlencoded({ extended: false }));
+app.use(
+  session({
+    secret: 'UnqlsxT34',
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+//para enviar mensajes al cliente
+app.use(flash());
 //###Global Variables###
-
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  next();
+});
 //###Routes###
 app.use(require('./routes/index.routes'));
 app.use(require('./routes/notes.routes'));
+app.use(require('./routes/users.routes'));
 //###Static Files###
 app.use(express.static(path.join(__dirname, 'public')));
 

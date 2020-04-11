@@ -14,6 +14,7 @@ const UserSchema = new Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -24,7 +25,7 @@ const UserSchema = new Schema(
 );
 
 //siframos las passwords con bcryptjs usando un hash
-UserSchema.methods.encrypPassword = async (password) => {
+UserSchema.methods.encryptPassword = async (password) => {
   const salt = await bcrypt.genSalt(10);
   //devuelve la contraseña sifrada
   return await bcrypt.hash(password, salt);
@@ -36,4 +37,4 @@ UserSchema.methods.matchPassword = async function (password) {
 };
 //el this.password corresponde a la contraseña cifrada que esta en la base de datos
 
-module.exports = model('User', userSchema);
+module.exports = model('User', UserSchema);
