@@ -6,9 +6,11 @@ const methodOverride = require('method-override');
 const exphbs = require('express-handlebars');
 const flash = require('connect-flash');
 const session = require('express-session');
+const passport = require('passport');
 
 //###Initializations###
 const app = express();
+require('./config/passport');
 
 //###Settings###
 //configuracion del servidor
@@ -45,10 +47,19 @@ app.use(
 );
 //para enviar mensajes al cliente
 app.use(flash());
+//Validacion y seguimiento de usuarios
+//Passport va despues de session porque passpord se basa en session
+app.use(passport.initialize());
+app.use(passport.session());
+
 //###Global Variables###
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
+  //Mensaje que viene desde passport:
+  res.locals.error = req.flash('error');
+  //Variable con la validacion del usuario
+  res.locals.user = req.user || null;
   next();
 });
 //###Routes###

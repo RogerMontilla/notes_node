@@ -1,14 +1,14 @@
 const { Router } = require('express');
 const router = Router();
-const { renderSingUpForm, renderSingInForm, singUp, singIn, logout } = require('../controllers/users.controller');
+const { renderSingUpForm, renderSingInForm, signUp, signIn, logout } = require('../controllers/users.controller');
 
-router.get('/users/singup', renderSingUpForm);
+router.get('/users/signup', renderSingUpForm);
 
-router.post('/users/singup', singUp);
+router.post('/users/signup', signUp);
 
-router.get('/users/singin', renderSingInForm);
+router.get('/users/signin', renderSingInForm);
 
-router.post('/users/singin', singIn);
+router.post('/users/signin', signIn);
 
 router.get('/users/logout', logout);
 
